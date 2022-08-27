@@ -1,0 +1,8 @@
+tweepy
+praw
+rake-nltk
+nltk
+boto
+newspaper3k
+pillow
+
