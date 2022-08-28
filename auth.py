@@ -16,7 +16,7 @@ s3 = S3Connection(os.environ["TWITTER_KEY"],
                   os.environ["REDDIT_CLIENT_SECRET"])
 
 
-def twitter_api_access() -> API:
+def get_twitter_api_access() -> API:
     auth = tweepy.OAuthHandler(os.getenv("TWITTER_KEY"),
                                os.getenv("TWITTER_KEY_SECRET"))
     auth.set_access_token(os.getenv("TWITTER_TOKEN"),
@@ -25,7 +25,7 @@ def twitter_api_access() -> API:
     return api
 
 
-def reddit_api_access() -> Reddit:
+def get_reddit_api_access() -> Reddit:
     api = praw.Reddit(
         client_id=os.getenv("REDDIT_CLIENT"),
         client_secret=os.getenv("REDDIT_CLIENT_SECRET"),

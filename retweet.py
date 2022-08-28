@@ -2,8 +2,8 @@ import auth
 import random
 
 
-def retweet() -> None:
-    twitter_api = auth.twitter_api_access()
+def retweet_relevant_tweet() -> None:
+    twitter_api = auth.get_twitter_api_access()
     following = twitter_api.get_friend_ids()
     random_user_index = random.randint(0, len(following) - 1)
     tweet_list = twitter_api.user_timeline(count=1,
@@ -14,5 +14,11 @@ def retweet() -> None:
         twitter_api.retweet(tweet.id)
 
 
-retweet()
+retweeted = False
+while not retweeted:
+    try:
+        retweet_relevant_tweet()
+        retweeted = True
+    except:
+        continue
 

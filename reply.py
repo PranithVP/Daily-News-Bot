@@ -68,7 +68,7 @@ def reply_image(text):
     file = io.BytesIO()
     img.save(file, 'PNG')
     file.seek(0)
-    twitter_api = auth.twitter_api_access()
+    twitter_api = auth.get_twitter_api_access()
     user = twitter_api.user_timeline(screen_name="Daily_News_Bot", count=1,
                                      include_rts=False, tweet_mode='extended')
     for tweet in user:
