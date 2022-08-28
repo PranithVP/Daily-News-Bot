@@ -1,3 +1,4 @@
+# Import libraries
 import auth
 import random
 
@@ -21,8 +22,10 @@ def like_relevant_tweet():
     twitter_api = auth.get_twitter_api_access()
     following = twitter_api.get_friend_ids()
 
-    # Choose a random user and retweet their latest post
+    # Choose a random user from following 
     random_user_index = random.randint(0, len(following) - 1)
+
+    # Like the user's latest tweet
     tweet_list = twitter_api.user_timeline(count=1,
                                            user_id=following[random_user_index],
                                            include_rts=False,
@@ -31,10 +34,11 @@ def like_relevant_tweet():
         twitter_api.create_favorite(tweet.id)
 
 
-retweeted = False
-while not retweeted:
+# Retweet a random post
+liked = False
+while not liked:
     try:
         like_relevant_tweet()
-        retweeted = True
+        liked = True
     except:
         continue
