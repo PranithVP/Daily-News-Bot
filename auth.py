@@ -1,3 +1,4 @@
+# Import libraries
 import tweepy
 import praw
 import os
@@ -5,6 +6,7 @@ from boto.s3.connection import S3Connection
 from praw import Reddit
 from tweepy import API
 
+# Create S3 connection with environment variables
 s3 = S3Connection(os.environ["TWITTER_KEY"],
                   os.environ["TWITTER_KEY_SECRET"],
                   os.environ["TWITTER_TOKEN"],
@@ -17,6 +19,7 @@ s3 = S3Connection(os.environ["TWITTER_KEY"],
 
 
 def get_twitter_api_access() -> API:
+    # Set up authentication with credentials
     auth = tweepy.OAuthHandler(os.getenv("TWITTER_KEY"),
                                os.getenv("TWITTER_KEY_SECRET"))
     auth.set_access_token(os.getenv("TWITTER_TOKEN"),
@@ -26,6 +29,7 @@ def get_twitter_api_access() -> API:
 
 
 def get_reddit_api_access() -> Reddit:
+    # Set up API with credentials
     api = praw.Reddit(
         client_id=os.getenv("REDDIT_CLIENT"),
         client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
