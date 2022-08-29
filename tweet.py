@@ -21,7 +21,7 @@ def get_reddit_post(post_number: int) -> Any:
     news_subreddit = reddit_api.subreddit("news")
     posts = news_subreddit.top(limit=post_number, time_filter="day")
     count = 1
-    
+
     # Return the correct post according to post_number
     for item in posts:
         if count == post_number:
@@ -67,7 +67,7 @@ def get_previous_tweets(username: str) -> List[str]:
     tweets_list = tweets_merged.split('\n')[::2]
     titles = []
 
-    # Add titles from tweets to titles list
+    # Add titles from tweets to titles list, return title list
     for i in range(len(tweets_list)):
         # Ignore multiple urls + TLDR text
         if tweets_list[i][:5] == 'https' and tweets_list[i][23:27] == "Didn":
@@ -110,7 +110,7 @@ while not tweeted:
         restricted = post.url[:14] not in restrictions
 
         # Check for restrictions, empty hashtag list, duplications, and summary
-        if hashtags_exist and unique and not restricted and lines < 18:
+        if hashtags_exist and unique and not restricted and 4 < lines < 18:
             hashtags = "".join("#" + word + " " for word in hashtags_list)
             content = post.title + "\n" + hashtags + "\n" + post.url
             twitter_api.update_status(content)

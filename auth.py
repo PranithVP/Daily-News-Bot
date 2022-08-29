@@ -6,7 +6,6 @@ from boto.s3.connection import S3Connection
 from praw import Reddit
 from tweepy import API
 
-
 # Create S3 connection with environment variables
 s3 = S3Connection(os.environ["TWITTER_KEY"],
                   os.environ["TWITTER_KEY_SECRET"],
