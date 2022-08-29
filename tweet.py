@@ -21,6 +21,7 @@ def get_reddit_post(post_number: int) -> Any:
     news_subreddit = reddit_api.subreddit("news")
     posts = news_subreddit.top(limit=post_number, time_filter="day")
     count = 1
+    
     # Return the correct post according to post_number
     for item in posts:
         if count == post_number:
@@ -51,19 +52,21 @@ def get_hashtag_list(url: str, amount: int) -> List[str]:
         return words[:amount]
 
 
-def get_previous_tweets() -> List[str]:
-    """ Return a list of @Daily_News_Bot's previous article titles.
+def get_previous_tweets(username: str) -> List[str]:
+    """ Return a list of a user's previous article titles.
     """
     # Get Twitter API access
     api = auth.get_twitter_api_access()
-    user = api.user_timeline(screen_name='Daily_News_Bot', count=16,
+    user = api.user_timeline(screen_name=username, count=16,
                              include_rts=False, tweet_mode='extended')
+    
     # Merge tweets into string
     tweets_merged = ''
     for status in user:
         tweets_merged += status.full_text
     tweets_list = tweets_merged.split('\n')[::2]
     titles = []
+
     # Add titles from tweets to titles list
     for i in range(len(tweets_list)):
         # Ignore multiple urls + TLDR text
@@ -94,21 +97,26 @@ while not tweeted:
     # Try tweeting unless error is raised
     try:
         # Get previous tweet list and top reddit post
-        previous_tweets = get_previous_tweets()
+        previous_tweets = get_previous_tweets("Daily_News_Bot")
         post = get_reddit_post(number)
         hashtags_list = get_hashtag_list(post.url, 6)
-        # Tweet post if hashtag list is valid and article is not a duplicate
+        
+        # Create hashtag list, summary, restrictions
         unique = post.title not in previous_tweets
         hashtags_exist = hashtags_list is not None
+        text = reply.summarize(post)
+        image, lines = reply.make_image(text)
         restrictions = ["https://apnews"]
-        if hashtags_exist and unique and post.url[:14] not in restrictions:
+        restricted = post.url[:14] not in restrictions
+
+        # Check for restrictions, empty hashtag list, duplications, and summary
+        if hashtags_exist and unique and not restricted and lines < 18:
             hashtags = "".join("#" + word + " " for word in hashtags_list)
             content = post.title + "\n" + hashtags + "\n" + post.url
             twitter_api.update_status(content)
             tweeted = True
             like.like_latest_tweet("Daily_News_Bot")
-            text = reply.summarize(post)
-            reply.reply_image(text)
+            reply.reply_image(image)
         else:
             number += 1
     # If any error is raised, iterate to next reddit post

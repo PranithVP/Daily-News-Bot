@@ -1,7 +1,7 @@
 import io
 import auth
 import textwrap
-from typing import Any
+from typing import Any, Tuple
 from PIL import Image, ImageDraw, ImageFont
 from newspaper import Article
 from nltk.corpus import stopwords
@@ -56,23 +56,32 @@ def summarize(post: Any) -> str:
     return summary.strip()
 
 
-def reply_image(text):
+def make_image(text: str) -> Tuple[io.BytesIO, int]:
+    # Set up dimensions and draw text
     wrapped_text = textwrap.wrap(text, width=67)
-    w, h = (755, len(wrapped_text) * 45)
+    w, h = (755, len(wrapped_text) * 50)
     font = ImageFont.truetype('georgia.ttf', 22)
     img = Image.new("RGBA", (w, h), "white")
     draw = ImageDraw.Draw(img)
     for i in range(len(wrapped_text)):
         draw.multiline_text((35, 40 * (i + 1)), font=font,
                             text=wrapped_text[i], fill=(0, 0, 0))
+
+    # Save to BytesIO object and return it
     file = io.BytesIO()
     img.save(file, 'PNG')
     file.seek(0)
+    return file, len(wrapped_text)
+
+
+def reply_image(file: io.BytesIO) -> None:
+    # Get Twitter API access
     twitter_api = auth.get_twitter_api_access()
     user = twitter_api.user_timeline(screen_name="Daily_News_Bot", count=1,
                                      include_rts=False, tweet_mode='extended')
+
+    # Reply the summary to the latest tweet
     for tweet in user:
         twitter_api.update_status_with_media(
             in_reply_to_status_id=tweet.id, filename="Description", file=file,
             status="Didn't read the article? No worries, here's a summary:")
-
