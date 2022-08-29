@@ -122,11 +122,13 @@ while not tweeted:
             like.like_latest_tweet("Daily_News_Bot")
             reply.reply_image(image)
         else:
+            print("Criteria not met (" + number + ")")
             number += 1
             if number > 15:
                 exit()
     # If any error is raised, iterate to next reddit post
     except:
+        print("Error (" + number + ")")
         number += 1
         if number > 15:
             exit()
