@@ -59,7 +59,7 @@ def summarize(post: Any) -> str:
 def make_image(text: str) -> Tuple[io.BytesIO, int]:
     # Set up dimensions and draw text
     wrapped_text = textwrap.wrap(text, width=67)
-    w, h = (755, len(wrapped_text) * 50)
+    w, h = (755, len(wrapped_text) * 48)
     font = ImageFont.truetype('georgia.ttf', 22)
     img = Image.new("RGBA", (w, h), "white")
     draw = ImageDraw.Draw(img)

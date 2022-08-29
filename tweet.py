@@ -3,6 +3,7 @@ import auth
 import nltk
 import reply
 import like
+import sys
 from typing import Any, List
 from newspaper import Article
 from nltk import word_tokenize
@@ -96,6 +97,7 @@ twitter_api = auth.get_twitter_api_access()
 while not tweeted:
     # Try tweeting unless error is raised
     try:
+        print("Attempting to tweet")
         # Get previous tweet list and top reddit post
         previous_tweets = get_previous_tweets("Daily_News_Bot")
         post = get_reddit_post(number)
@@ -106,11 +108,13 @@ while not tweeted:
         hashtags_exist = hashtags_list is not None
         text = reply.summarize(post)
         image, lines = reply.make_image(text)
-        restrictions = ["https://apnews"]
-        restricted = post.url[:14] not in restrictions
+        restrictions = ["apnews", "eastidahonews"]
+        not_restricted = True
+        for item in restrictions:
+            not_restricted = item not in post.url and not_restricted
 
         # Check for restrictions, empty hashtag list, duplications, and summary
-        if hashtags_exist and unique and not restricted and 4 < lines < 18:
+        if hashtags_exist and unique and not_restricted and 4 < lines < 23:
             hashtags = "".join("#" + word + " " for word in hashtags_list)
             content = post.title + "\n" + hashtags + "\n" + post.url
             twitter_api.update_status(content)
@@ -119,6 +123,10 @@ while not tweeted:
             reply.reply_image(image)
         else:
             number += 1
+            if number > 15:
+                exit()
     # If any error is raised, iterate to next reddit post
     except:
         number += 1
+        if number > 15:
+            exit()
