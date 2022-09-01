@@ -3,7 +3,6 @@ import auth
 import nltk
 import reply
 import like
-import sys
 from typing import Any, List
 from newspaper import Article
 from nltk import word_tokenize
@@ -127,6 +126,8 @@ while not tweeted:
             if number > 15:
                 exit()
     # If any error is raised, iterate to next reddit post
+    except SystemExit:
+        raise
     except:
         print("Error (" + str(number) + ")")
         number += 1
