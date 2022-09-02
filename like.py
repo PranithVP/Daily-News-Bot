@@ -34,7 +34,7 @@ def like_relevant_tweet():
         twitter_api.create_favorite(tweet.id)
 
 
-# Like a random post
+# Like a random relevant post
 liked = False
 while not liked:
     try:

@@ -20,7 +20,7 @@ def retweet_relevant_tweet() -> None:
         twitter_api.retweet(tweet.id)
 
 
-# Retweet a random post
+# Retweet a random relevant tweet
 retweeted = False
 while not retweeted:
     try:
