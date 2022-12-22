@@ -3,7 +3,7 @@ name: run tweet.py
 on:
   schedule:
     # - cron: '0 */4 * * *' # Every 4 hours
-    - cron: '10 1 * * *'
+    - cron: '*/10 * * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
