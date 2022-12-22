@@ -1,4 +1,4 @@
-# Daily-News-Bot
+# Daily News Bot
 A python program that uses Reddit posts to formulate tweets on Twitter. 
 
 The Reddit API is accessed via [PRAW](https://praw.readthedocs.io/en/stable/), and the Twitter API via [Tweepy](https://docs.tweepy.org/en/stable/). 
